@@ -1,0 +1,39 @@
+seeds:
+  germany_stable_full:
+    caches: [dipul_stable_cache]
+    coverages: [germany]
+    levels:
+      from: 0
+      to: 19
+
+  germany_temp_nfz_fast:
+    caches: [dipul_temp_nfz_cache]
+    coverages: [germany]
+    levels:
+      from: 0
+      to: 19
+
+  hotspot_stable_full:
+    caches: [dipul_stable_cache]
+    coverages: [hotspot]
+    levels:
+      from: 0
+      to: 19
+
+  hotspot_temp_nfz_fast:
+    caches: [dipul_temp_nfz_cache]
+    coverages: [hotspot]
+    levels:
+      from: 0
+      to: 19
+
+coverages:
+  # Broad default area for Germany. Adjust if you want to reduce disk usage.
+  germany:
+    bbox: [5.5, 47.0, 15.6, 55.2]
+    srs: EPSG:4326
+
+  # Replace with your frequent flight area for fast local performance.
+  hotspot:
+    bbox: [8.40, 49.95, 9.05, 50.22]
+    srs: EPSG:4326

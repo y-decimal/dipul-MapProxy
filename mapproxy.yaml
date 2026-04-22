@@ -1,0 +1,124 @@
+services:
+  demo:
+  wms:
+    md:
+      title: DiPul MapProxy for iNav
+      abstract: DiPul WMS split into stable and temporary NFZ caches for iNav Mission Planner.
+      online_resource: https://www.dipul.de/homepage/de/hilfe/anleitung-fuer-den-web-map-service-wms/
+  tms:
+    use_grid_names: true
+
+globals:
+  image:
+    # Keep sharp labels and avoid smoothing when reprojection/rescaling is required.
+    resampling_method: nearest
+  cache:
+    base_dir: ./cache_data
+    lock_dir: ./cache_data/locks
+    tile_lock_dir: ./cache_data/tile_locks
+    meta_size: [4, 4]
+    meta_buffer: 64
+    concurrent_tile_creators: 4
+  http:
+    client_timeout: 20
+    hide_error_details: true
+    headers:
+      User-Agent: DiPul-MapProxy-iNav
+
+grids:
+  inav_webmercator:
+    base: GLOBAL_WEBMERCATOR
+    num_levels: 20
+
+  inav_geodetic:
+    base: GLOBAL_GEODETIC
+    num_levels: 20
+
+sources:
+  osm_tiles:
+    type: tile
+    grid: inav_webmercator
+    url: https://tile.openstreetmap.org/%(z)s/%(x)s/%(y)s.png
+
+  dipul_stable_wms:
+    type: wms
+    req:
+      url: https://uas-betrieb.de/geoservices/dipul/ows?SERVICE=WMS&
+      layers: bahnanlagen,behoerden,binnenwasserstrassen,bundesautobahnen,bundesstrassen,diplomatische_vertretungen,ffh-gebiete,flugbeschraenkungsgebiete,flughaefen,flugplaetze,freibaeder,haengegleiter,industrieanlagen,internationale_organisationen,justizvollzugsanstalten,kontrollzonen,kraftwerke,krankenhaeuser,labore,militaerische_anlagen,modellflugplaetze,nationalparks,naturschutzgebiete,polizei,schifffahrtsanlagen,seewasserstrassen,sicherheitsbehoerden,stromleitungen,umspannwerke,vogelschutzgebiete,windkraftanlagen,wohngrundstuecke
+      transparent: true
+    supported_srs: ['EPSG:3857', 'EPSG:4326']
+
+  dipul_temp_nfz_wms:
+    type: wms
+    req:
+      url: https://uas-betrieb.de/geoservices/dipul/ows?SERVICE=WMS&
+      layers: temporaere_betriebseinschraenkungen,inaktive_temporaere_betriebseinschraenkungen
+      transparent: true
+    supported_srs: ['EPSG:3857', 'EPSG:4326']
+
+caches:
+  osm_cache:
+    grids: [inav_webmercator, inav_geodetic]
+    sources: [osm_tiles]
+    format: image/png
+    request_format: image/png
+    upscale_tiles: 0
+    downscale_tiles: 0
+    refresh_before:
+      days: 30
+
+  dipul_stable_cache:
+    grids: [inav_webmercator, inav_geodetic]
+    sources: [dipul_stable_wms]
+    format: image/png
+    request_format: image/png
+    # Render each zoom level independently; do not synthesize from neighboring levels.
+    upscale_tiles: 0
+    downscale_tiles: 0
+    refresh_before:
+      days: 30
+
+  dipul_temp_nfz_cache:
+    grids: [inav_webmercator, inav_geodetic]
+    sources: [dipul_temp_nfz_wms]
+    format: image/png
+    request_format: image/png
+    # Render each zoom level independently; do not synthesize from neighboring levels.
+    upscale_tiles: 0
+    downscale_tiles: 0
+    refresh_before:
+      hours: 1
+
+layers:
+  - name: inav_dipul_base
+    title: DiPul Base (all layers except temporary NFZ)
+    layers:
+      - name: inav_dipul_base_map
+        title: OSM Basemap
+        sources: [osm_cache]
+      - name: inav_dipul_base_overlay
+        title: DiPul Stable Overlay
+        sources: [dipul_stable_cache]
+
+  - name: inav_dipul_temp_nfz
+    title: DiPul Temporary NFZ (active + inactive)
+    layers:
+      - name: inav_dipul_temp_nfz_map
+        title: OSM Basemap
+        sources: [osm_cache]
+      - name: inav_dipul_temp_nfz_overlay
+        title: DiPul Temporary NFZ Overlay
+        sources: [dipul_temp_nfz_cache]
+
+  - name: inav_dipul_all
+    title: DiPul Base + Temporary NFZ
+    layers:
+      - name: inav_dipul_all_map
+        title: OSM Basemap
+        sources: [osm_cache]
+      - name: inav_dipul_all_base_overlay
+        title: DiPul Stable Overlay
+        sources: [dipul_stable_cache]
+      - name: inav_dipul_all_temp_overlay
+        title: DiPul Temporary NFZ Overlay
+        sources: [dipul_temp_nfz_cache]
