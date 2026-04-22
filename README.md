@@ -7,13 +7,6 @@ This setup provides a MapProxy WMS optimized for iNav Configurator with:
 - `inav_dipul_temp_nfz`: temporary NFZ layers only (active + inactive)
 - `inav_dipul_all`: combined view of both
 
-Transparency defaults:
-
-- Basemap: fully opaque
-- DiPul overlays: transparency comes from the upstream WMS itself
-
-MapProxy 2.0 in this environment does not accept per-layer opacity settings in the config file. If you want to make the overlays visually lighter, the practical options are to use a lighter basemap, adjust opacity in the client if it supports that, or pre-process the overlay tiles externally.
-
 Caching policy:
 
 - Base layer cache refresh: 30 days
@@ -68,8 +61,6 @@ In iNav Configurator:
   - `inav_dipul_temp_nfz`
   - `inav_dipul_all`
 
-Tip: if you want quick switching between base and temp NFZ views, keep two iNav profiles.
-
 ## 3) Seed cache for speed in frequent areas
 
 Edit `seed.yaml` `hotspot` coverage to your usual flying area first.
@@ -101,3 +92,6 @@ DiPul WMS docs and usage conditions:
 - https://www.dipul.de/homepage/de/hilfe/anleitung-fuer-den-web-map-service-wms/
 
 For non-commercial use, ensure your downstream UI shows the required source attribution text per DiPul terms.
+
+
+## Note: This documentation and the launch script was entirely vibe coded. If you notice any problems, feel free to create an Issue or a PR with a fix
