@@ -18,6 +18,10 @@ Rendering behavior:
 - No cross-zoom interpolation fallback from neighboring levels
 - Basemap tiles are cached separately and reused beneath the DiPul overlays
 
+-------
+
+## Note: This documentation and the launch script was entirely vibe coded. If you notice any problems, feel free to create an Issue or a PR with a fix
+
 ## 1) Install and run locally
 
 Quick start (recommended):
@@ -92,6 +96,3 @@ DiPul WMS docs and usage conditions:
 - https://www.dipul.de/homepage/de/hilfe/anleitung-fuer-den-web-map-service-wms/
 
 For non-commercial use, ensure your downstream UI shows the required source attribution text per DiPul terms.
-
-
-## Note: This documentation and the launch script was entirely vibe coded. If you notice any problems, feel free to create an Issue or a PR with a fix
