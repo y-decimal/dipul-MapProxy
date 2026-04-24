@@ -12,27 +12,27 @@ Choose one of these layers in iNav:
 
 ## Step-by-step (with screenshots)
 
-### 1) Open map settings in iNav
+### 1) Locate the settings button in iNav Configurator
 
 ![iNav settings step 1](../resources/Settings1.png)
 
-### 2) Select MapProxy as provider
+### 2) Open the map provider dropdown
 
 ![iNav settings step 2](../resources/Settings2.png)
 
-### 3) Paste the copied MapProxy URL
+### 3) Select `MapProxy` from the provider dropdown
 
 ![iNav settings step 3](../resources/Settings3.png)
 
-### 4) Choose the layer you want
+### 4) Copy the URL from the DiPul MapProxy GUI
 
 ![iNav settings step 4](../resources/Settings4.png)
 
-### 5) Apply and verify map display
+### 5) Paste the URL into iNav Configurator
 
 ![iNav settings step 5](../resources/Settings5.png)
 
-### 6) Final check
+### 6) Choose the map layer and paste it into iNav Configurator
 
 ![iNav settings step 6](../resources/Settings6.png)
 

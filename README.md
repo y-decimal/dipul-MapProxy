@@ -1,6 +1,12 @@
-# DiPul MapProxy GUI Quickstart
+# What this project does
 
 This is a small GUI launcher that starts a local MapProxy server for iNav, containing information about restricted flight zones in Germany as provided by DiPul.
+
+Example map view in iNav with DiPul layers:
+
+![iNav demo view](resources/Demo.png)
+
+# DiPul MapProxy GUI Quickstart
 
 ## 1) Install requirements
 
