@@ -68,4 +68,7 @@ Quick values in iNav Configurator:
    - `inav_dipul_temp_nfz`
    - `inav_dipul_all`
 
-That is it for V1.
+
+-------------
+
+### Note: The GUI and the launch script were mostly vibe coded. Seems to work fine on my machine, results may differ for you though. Feel free to report any issues through the issues tracker.
