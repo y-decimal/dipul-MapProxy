@@ -42,7 +42,7 @@ MAPPROXY_HOST=127.0.0.1 MAPPROXY_PORT=8090 ./start-mapproxy.sh
 Barebones GUI prototype:
 
 ```bash
-python -m gui.app
+python launch-gui.py
 ```
 
 ```bash
