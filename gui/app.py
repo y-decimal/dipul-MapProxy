@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import tkinter as tk
 from tkinter import ttk
+from pathlib import Path
 
+from .control_bar import ControlBar
 from .log_panel import LogPanel
 from .status_bar import StatusBar
 from .theme import DEFAULT_THEME, GuiTheme
@@ -68,6 +70,9 @@ class MapProxyGuiApp:
         self.status_bar = StatusBar(outer, self.theme)
         self.status_bar.frame.pack(fill="x", pady=(18, 10))
 
+        self.control_bar = ControlBar(outer, self.theme)
+        self.control_bar.frame.pack(fill="x", pady=(0, 10))
+
         self.log_panel = LogPanel(outer, self.theme)
         self.log_panel.frame.pack(fill="both", expand=True)
 
@@ -76,7 +81,10 @@ class MapProxyGuiApp:
 
 
 def main() -> None:
+    from .controller import GuiController
+
     app = MapProxyGuiApp()
+    GuiController(app, project_root=Path(__file__).resolve().parent.parent)
     app.run()
 
 
