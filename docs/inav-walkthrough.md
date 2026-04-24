@@ -1,14 +1,6 @@
 # iNav Configuration Walkthrough
 
-Use this after the GUI is running and you already copied the URL.
-
-## Layer options
-
-Choose one of these layers in iNav:
-
-- `inav_dipul_base`
-- `inav_dipul_temp_nfz`
-- `inav_dipul_all`
+Do this after the GUI is running and you clicked Start.
 
 ## Step-by-step (with screenshots)
 
@@ -33,6 +25,12 @@ Choose one of these layers in iNav:
 ![iNav settings step 5](../resources/Settings5.png)
 
 ### 6) Choose the map layer and paste it into iNav Configurator
+
+Choose one of these layers in iNav:
+
+- `inav_dipul_base`
+- `inav_dipul_temp_nfz`
+- `inav_dipul_all`
 
 ![iNav settings step 6](../resources/Settings6.png)
 
