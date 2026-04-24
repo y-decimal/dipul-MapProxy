@@ -36,4 +36,6 @@ Choose one of these layers in iNav:
 
 ### Example view
 
-![iNav demo view](../resources/Demo.png)
+![iNav demo view 1](../resources/Demo2.png)
+
+![iNav demo view 2](../resources/Demo3.png)

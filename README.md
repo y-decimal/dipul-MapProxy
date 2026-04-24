@@ -4,7 +4,7 @@ This is a small GUI launcher that starts a local MapProxy server for iNav, conta
 
 Example map view in iNav with DiPul layers:
 
-![iNav demo view](resources/Demo.png)
+![iNav demo view](resources/Demo1.png)
 
 # DiPul MapProxy GUI Quickstart
 
