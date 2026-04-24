@@ -46,7 +46,7 @@ from mapproxy.wsgiapp import make_wsgi_app
 host = os.environ.get("MAPPROXY_HOST", "0.0.0.0")
 port = int(os.environ.get("MAPPROXY_PORT", "8080"))
 
-app = make_wsgi_app(services_conf="mapproxy.yaml", debug=False, reloader=False)
+app = make_wsgi_app(services_conf="mapproxy_config/mapproxy.yaml", debug=False, reloader=False)
 with make_server(host, port, app) as server:
   server.serve_forever()
 PY

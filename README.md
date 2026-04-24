@@ -18,7 +18,7 @@ Rendering behavior:
 - No cross-zoom interpolation fallback from neighboring levels
 - Basemap tiles are cached separately and reused beneath the DiPul overlays
 
--------
+---
 
 ## Note: This documentation and the launch script was entirely vibe coded. If you notice any problems, feel free to create an Issue or a PR with a fix
 
@@ -39,13 +39,19 @@ Optional environment variables:
 MAPPROXY_HOST=127.0.0.1 MAPPROXY_PORT=8090 ./start-mapproxy.sh
 ```
 
+Barebones GUI prototype:
+
+```bash
+python -m gui.app
+```
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
 # Start server (default http://127.0.0.1:8080)
-mapproxy-util serve-develop mapproxy.yaml -b 0.0.0.0:8080
+mapproxy-util serve-develop mapproxy_config/mapproxy.yaml -b 0.0.0.0:8080
 ```
 
 WMS endpoint for clients:
@@ -67,26 +73,26 @@ In iNav Configurator:
 
 ## 3) Seed cache for speed in frequent areas
 
-Edit `seed.yaml` `hotspot` coverage to your usual flying area first.
+Edit `mapproxy_config/seed.yaml` `hotspot` coverage to your usual flying area first.
 
 Seed commands:
 
 ```bash
 # Full hotspot prewarm (both cache groups)
-mapproxy-seed -f mapproxy.yaml -s seed.yaml -c 4 --seed=hotspot_stable_full --seed=hotspot_temp_nfz_fast
+mapproxy-seed -f mapproxy_config/mapproxy.yaml -s mapproxy_config/seed.yaml -c 4 --seed=hotspot_stable_full --seed=hotspot_temp_nfz_fast
 
 # Broad Germany seed (very large disk/time footprint)
-mapproxy-seed -f mapproxy.yaml -s seed.yaml -c 4 --seed=germany_stable_full --seed=germany_temp_nfz_fast
+mapproxy-seed -f mapproxy_config/mapproxy.yaml -s mapproxy_config/seed.yaml -c 4 --seed=germany_stable_full --seed=germany_temp_nfz_fast
 ```
 
 Periodic refresh suggestions:
 
 ```bash
 # Refresh temporary NFZ cache frequently (e.g. hourly via cron/systemd timer)
-mapproxy-seed -f mapproxy.yaml -s seed.yaml -c 4 --seed=hotspot_temp_nfz_fast
+mapproxy-seed -f mapproxy_config/mapproxy.yaml -s mapproxy_config/seed.yaml -c 4 --seed=hotspot_temp_nfz_fast
 
 # Refresh stable cache less frequently (e.g. weekly/monthly)
-mapproxy-seed -f mapproxy.yaml -s seed.yaml -c 4 --seed=hotspot_stable_full
+mapproxy-seed -f mapproxy_config/mapproxy.yaml -s mapproxy_config/seed.yaml -c 4 --seed=hotspot_stable_full
 ```
 
 ## 4) Source and usage note
