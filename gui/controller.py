@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import webbrowser
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -24,7 +23,7 @@ class GuiController:
             on_start=self.start_server,
             on_stop=self.stop_server,
             on_restart=self.restart_server,
-            on_open_url=self.open_service_url,
+            on_copy_url=self.copy_service_url,
         )
         self.app.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
@@ -54,10 +53,11 @@ class GuiController:
             self.app.status_bar.set_status("Starting")
         self._sync_running_state()
 
-    def open_service_url(self) -> None:
+    def copy_service_url(self) -> None:
         url = self.manager.service_url
-        webbrowser.open(url)
-        self.app.log_panel.write(f"[gui] Opened {url}\n")
+        self.app.root.clipboard_clear()
+        self.app.root.clipboard_append(url)
+        self.app.log_panel.write(f"[gui] Copied URL to clipboard: {url}\n")
 
     def on_close(self) -> None:
         if self.manager.is_running():

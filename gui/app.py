@@ -63,7 +63,7 @@ class MapProxyGuiApp:
         ttk.Label(header, text="DiPul MapProxy", style="Title.TLabel").pack(anchor="w")
         ttk.Label(
             header,
-            text="Barebones launcher shell for a future server dashboard",
+            text="MapProxy launcher and status dashboard",
             style="Muted.TLabel",
         ).pack(anchor="w", pady=(4, 0))
 

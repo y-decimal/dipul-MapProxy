@@ -35,11 +35,7 @@ class LogPanel:
             font=(self.theme.font_family, self.theme.body_size),
         )
         self.text.pack(fill="both", expand=True, pady=(10, 0))
-        self.write(
-            "GUI shell ready.\n\n"
-            "This first phase only establishes the window layout and style hooks.\n"
-            "Server lifecycle and live log streaming will be added next.\n"
-        )
+        self.write("Launcher ready.\n" "Use Start to run MapProxy.\n")
 
     def write(self, message: str) -> None:
         self.text.configure(state="normal")
