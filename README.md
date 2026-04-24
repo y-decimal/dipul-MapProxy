@@ -6,6 +6,10 @@ Example map view in iNav with DiPul layers:
 
 ![iNav demo view](resources/Demo1.png)
 
+This is what the GUI looks like:
+
+![GUI demo view](resources/Demo1.png)
+
 # DiPul MapProxy GUI Quickstart
 
 ## 1) Install requirements
