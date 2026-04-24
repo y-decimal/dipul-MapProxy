@@ -92,6 +92,7 @@ class GuiController:
             parent=self.app.root,
             current=self.settings,
             on_save=self.save_settings,
+            theme=self.app.theme,
         )
 
     def save_settings(self, settings: GuiSettings) -> None:
