@@ -60,7 +60,7 @@ class TrayManager:
         draw.rectangle((12, 12, 52, 52), outline=(56, 189, 248), width=5)
 
         menu = pystray.Menu(
-            pystray.MenuItem("Restore", restore_action),
+            pystray.MenuItem("Restore", restore_action, default=True),
             pystray.MenuItem("Exit", exit_action),
         )
 
