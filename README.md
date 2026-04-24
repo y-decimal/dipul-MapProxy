@@ -1,144 +1,61 @@
-# DiPul MapProxy for iNav Mission Planner
+# DiPul MapProxy GUI Quickstart
 
-This setup provides a MapProxy WMS optimized for iNav Configurator with:
+This is a small GUI launcher that starts a local MapProxy server for iNav, containing information about restricted flight zones in Germany as provided by DiPul.
 
-- a cached online basemap underneath
-- `inav_dipul_base`: all DiPul layers except temporary NFZ
-- `inav_dipul_temp_nfz`: temporary NFZ layers only (active + inactive)
-- `inav_dipul_all`: combined view of both
-
-Caching policy:
-
-- Base layer cache refresh: 30 days
-- Temporary NFZ cache refresh: 60 minutes
-
-Rendering behavior:
-
-- Each zoom level is rendered independently (`upscale_tiles: 0`, `downscale_tiles: 0`)
-- No cross-zoom interpolation fallback from neighboring levels
-- Basemap tiles are cached separately and reused beneath the DiPul overlays
-
----
-
-## Note: This documentation and the launch script was entirely vibe coded. If you notice any problems, feel free to create an Issue or a PR with a fix
-
-## 1) Install and run locally
-
-### Linux / macOS
-
-Quick start (recommended):
+## 1) Install requirements
 
 ```bash
-./start-mapproxy.sh
+python -m venv .venv
 ```
 
-Or use the cross-platform Python script:
-
-```bash
-python start-mapproxy.py
-```
-
-The script runs MapProxy in the foreground, so it will stop when you press Ctrl+C or close the terminal.
-It uses a plain WSGI server without the development reloader, which avoids leaving a stray child process on the port.
-
-Optional environment variables:
-
-```bash
-MAPPROXY_HOST=127.0.0.1 MAPPROXY_PORT=8090 ./start-mapproxy.sh
-# or
-MAPPROXY_HOST=127.0.0.1 MAPPROXY_PORT=8090 python start-mapproxy.py
-```
-
-### Windows
-
-Use the cross-platform Python script (requires Python 3.8+):
-
-```cmd
-python start-mapproxy.py
-```
-
-Or with custom host/port:
-
-```cmd
-python start-mapproxy.py --host 127.0.0.1 --port 8090
-```
-
-Environment variables (PowerShell):
+Windows PowerShell:
 
 ```powershell
-$env:MAPPROXY_HOST = "0.0.0.0"
-$env:MAPPROXY_PORT = "8090"
-python start-mapproxy.py
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
-Environment variables (Command Prompt):
+Linux/macOS:
 
-```cmd
-set MAPPROXY_HOST=0.0.0.0
-set MAPPROXY_PORT=8090
-python start-mapproxy.py
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Barebones GUI prototype:
+## 2) Launch the GUI
 
 ```bash
 python launch-gui.py
 ```
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+## 3) Start MapProxy and copy URL
 
-# Start server (default http://127.0.0.1:8080)
-mapproxy-util serve-develop mapproxy_config/mapproxy.yaml -b 0.0.0.0:8080
-```
+1. Click `Start` in the GUI.
+2. Wait until status shows `Running`.
+3. Click `Copy URL`.
 
-WMS endpoint for clients:
+### Startup screenshots
 
-- `http://<host>:8080/service?`
+![Launch GUI and start server](resources/Start1.png)
+![Server running and URL copied](resources/Start2.png)
 
-Important: `0.0.0.0` is only a bind address for the server. In iNav, use `http://127.0.0.1:8080/service?` if iNav is on the same machine, or your LAN IP if it runs elsewhere.
+Default URL is usually:
 
-## 2) iNav Configurator settings
+- `http://127.0.0.1:8080/service?`
 
-In iNav Configurator:
+## 4) Configure iNav
 
-- Map provider: `MapProxy`
-- MapProxy URL: `http://<host>:8080/service?`
-- MapProxy layer: choose one of:
-  - `inav_dipul_base`
-  - `inav_dipul_temp_nfz`
-  - `inav_dipul_all`
+For the full step-by-step setup with screenshots, see:
 
-## 3) Seed cache for speed in frequent areas
+- [docs/inav-walkthrough.md](docs/inav-walkthrough.md)
 
-Edit `mapproxy_config/seed.yaml` `hotspot` coverage to your usual flying area first.
+Quick values in iNav Configurator:
 
-Seed commands:
+1. Map provider: `MapProxy`
+2. MapProxy URL: paste the copied URL
+3. MapProxy layer: choose one of:
+   - `inav_dipul_base`
+   - `inav_dipul_temp_nfz`
+   - `inav_dipul_all`
 
-```bash
-# Full hotspot prewarm (both cache groups)
-mapproxy-seed -f mapproxy_config/mapproxy.yaml -s mapproxy_config/seed.yaml -c 4 --seed=hotspot_stable_full --seed=hotspot_temp_nfz_fast
-
-# Broad Germany seed (very large disk/time footprint)
-mapproxy-seed -f mapproxy_config/mapproxy.yaml -s mapproxy_config/seed.yaml -c 4 --seed=germany_stable_full --seed=germany_temp_nfz_fast
-```
-
-Periodic refresh suggestions:
-
-```bash
-# Refresh temporary NFZ cache frequently (e.g. hourly via cron/systemd timer)
-mapproxy-seed -f mapproxy_config/mapproxy.yaml -s mapproxy_config/seed.yaml -c 4 --seed=hotspot_temp_nfz_fast
-
-# Refresh stable cache less frequently (e.g. weekly/monthly)
-mapproxy-seed -f mapproxy_config/mapproxy.yaml -s mapproxy_config/seed.yaml -c 4 --seed=hotspot_stable_full
-```
-
-## 4) Source and usage note
-
-DiPul WMS docs and usage conditions:
-
-- https://www.dipul.de/homepage/de/hilfe/anleitung-fuer-den-web-map-service-wms/
-
-For non-commercial use, ensure your downstream UI shows the required source attribution text per DiPul terms.
+That is it for V1.
