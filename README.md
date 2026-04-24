@@ -24,10 +24,18 @@ Rendering behavior:
 
 ## 1) Install and run locally
 
+### Linux / macOS
+
 Quick start (recommended):
 
 ```bash
 ./start-mapproxy.sh
+```
+
+Or use the cross-platform Python script:
+
+```bash
+python start-mapproxy.py
 ```
 
 The script runs MapProxy in the foreground, so it will stop when you press Ctrl+C or close the terminal.
@@ -37,6 +45,38 @@ Optional environment variables:
 
 ```bash
 MAPPROXY_HOST=127.0.0.1 MAPPROXY_PORT=8090 ./start-mapproxy.sh
+# or
+MAPPROXY_HOST=127.0.0.1 MAPPROXY_PORT=8090 python start-mapproxy.py
+```
+
+### Windows
+
+Use the cross-platform Python script (requires Python 3.8+):
+
+```cmd
+python start-mapproxy.py
+```
+
+Or with custom host/port:
+
+```cmd
+python start-mapproxy.py --host 127.0.0.1 --port 8090
+```
+
+Environment variables (PowerShell):
+
+```powershell
+$env:MAPPROXY_HOST = "0.0.0.0"
+$env:MAPPROXY_PORT = "8090"
+python start-mapproxy.py
+```
+
+Environment variables (Command Prompt):
+
+```cmd
+set MAPPROXY_HOST=0.0.0.0
+set MAPPROXY_PORT=8090
+python start-mapproxy.py
 ```
 
 Barebones GUI prototype:
