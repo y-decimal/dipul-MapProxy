@@ -20,8 +20,9 @@ Open a console window, navigate to where you want to install the GUI, then clone
 git clone https://github.com/y-decimal/dipul-MapProxy
 ```
 
+-------
 
-Create a virtual environment
+Now navigate to the new directory and create a virtual environment
 
 ```bash
 python -m venv .venv
@@ -29,6 +30,7 @@ python -m venv .venv
 
 Note: You will need to install python if you don't already have it
 
+-------
 
 Install the requirements
 
@@ -46,6 +48,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+--------
 
 ## 2) Launch the GUI
 
@@ -53,6 +56,7 @@ pip install -r requirements.txt
 python launch-gui.py
 ```
 
+-------
 
 ## 3) Start MapProxy and copy URL
 
@@ -69,6 +73,7 @@ Default URL is usually:
 
 - `http://127.0.0.1:8080/service?`
 
+-------
 
 ## 4) Configure iNav
 
