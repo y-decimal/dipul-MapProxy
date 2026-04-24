@@ -1,3 +1,4 @@
 mapproxy==2.0.0
 pyproj
 setuptools<81
+pystray
