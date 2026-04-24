@@ -1,2 +1,4 @@
-cache_data/
+mapproxy_config/cache_data/
 .venv/
+__pycache__/
+gui_settings.json

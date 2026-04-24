@@ -1,98 +1,67 @@
-# DiPul MapProxy for iNav Mission Planner
+# What this project does
 
-This setup provides a MapProxy WMS optimized for iNav Configurator with:
+This is a small GUI launcher that starts a local MapProxy server for iNav, containing information about restricted flight zones in Germany as provided by DiPul.
 
-- a cached online basemap underneath
-- `inav_dipul_base`: all DiPul layers except temporary NFZ
-- `inav_dipul_temp_nfz`: temporary NFZ layers only (active + inactive)
-- `inav_dipul_all`: combined view of both
+Example map view in iNav with DiPul layers:
 
-Caching policy:
+![iNav demo view](resources/Demo1.png)
 
-- Base layer cache refresh: 30 days
-- Temporary NFZ cache refresh: 60 minutes
+# DiPul MapProxy GUI Quickstart
 
-Rendering behavior:
-
-- Each zoom level is rendered independently (`upscale_tiles: 0`, `downscale_tiles: 0`)
-- No cross-zoom interpolation fallback from neighboring levels
-- Basemap tiles are cached separately and reused beneath the DiPul overlays
-
--------
-
-## Note: This documentation and the launch script was entirely vibe coded. If you notice any problems, feel free to create an Issue or a PR with a fix
-
-## 1) Install and run locally
-
-Quick start (recommended):
+## 1) Install requirements
 
 ```bash
-./start-mapproxy.sh
+python -m venv .venv
 ```
 
-The script runs MapProxy in the foreground, so it will stop when you press Ctrl+C or close the terminal.
-It uses a plain WSGI server without the development reloader, which avoids leaving a stray child process on the port.
+Windows PowerShell:
 
-Optional environment variables:
-
-```bash
-MAPPROXY_HOST=127.0.0.1 MAPPROXY_PORT=8090 ./start-mapproxy.sh
+```powershell
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
+Linux/macOS:
+
 ```bash
-python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-
-# Start server (default http://127.0.0.1:8080)
-mapproxy-util serve-develop mapproxy.yaml -b 0.0.0.0:8080
 ```
 
-WMS endpoint for clients:
-
-- `http://<host>:8080/service?`
-
-Important: `0.0.0.0` is only a bind address for the server. In iNav, use `http://127.0.0.1:8080/service?` if iNav is on the same machine, or your LAN IP if it runs elsewhere.
-
-## 2) iNav Configurator settings
-
-In iNav Configurator:
-
-- Map provider: `MapProxy`
-- MapProxy URL: `http://<host>:8080/service?`
-- MapProxy layer: choose one of:
-  - `inav_dipul_base`
-  - `inav_dipul_temp_nfz`
-  - `inav_dipul_all`
-
-## 3) Seed cache for speed in frequent areas
-
-Edit `seed.yaml` `hotspot` coverage to your usual flying area first.
-
-Seed commands:
+## 2) Launch the GUI
 
 ```bash
-# Full hotspot prewarm (both cache groups)
-mapproxy-seed -f mapproxy.yaml -s seed.yaml -c 4 --seed=hotspot_stable_full --seed=hotspot_temp_nfz_fast
-
-# Broad Germany seed (very large disk/time footprint)
-mapproxy-seed -f mapproxy.yaml -s seed.yaml -c 4 --seed=germany_stable_full --seed=germany_temp_nfz_fast
+python launch-gui.py
 ```
 
-Periodic refresh suggestions:
+## 3) Start MapProxy and copy URL
 
-```bash
-# Refresh temporary NFZ cache frequently (e.g. hourly via cron/systemd timer)
-mapproxy-seed -f mapproxy.yaml -s seed.yaml -c 4 --seed=hotspot_temp_nfz_fast
+1. Click `Start` in the GUI.
+2. Wait until status shows `Running`.
+3. Click `Copy URL`.
 
-# Refresh stable cache less frequently (e.g. weekly/monthly)
-mapproxy-seed -f mapproxy.yaml -s seed.yaml -c 4 --seed=hotspot_stable_full
-```
+### Startup screenshots
 
-## 4) Source and usage note
+![Launch GUI and start server](resources/Start1.png)
+![Server running and URL copied](resources/Start2.png)
 
-DiPul WMS docs and usage conditions:
+Default URL is usually:
 
-- https://www.dipul.de/homepage/de/hilfe/anleitung-fuer-den-web-map-service-wms/
+- `http://127.0.0.1:8080/service?`
 
-For non-commercial use, ensure your downstream UI shows the required source attribution text per DiPul terms.
+## 4) Configure iNav
+
+For the full step-by-step setup with screenshots, see:
+
+- [docs/inav-walkthrough.md](docs/inav-walkthrough.md)
+
+Quick values in iNav Configurator:
+
+1. Map provider: `MapProxy`
+2. MapProxy URL: paste the copied URL
+3. MapProxy layer: choose one of:
+   - `inav_dipul_base`
+   - `inav_dipul_temp_nfz`
+   - `inav_dipul_all`
+
+That is it for V1.
