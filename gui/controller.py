@@ -28,6 +28,8 @@ class GuiController:
         )
         self._last_running = False
         self._is_exiting = False
+        self._tray_unavailable_logged = False
+        self._minimized_to_tray = False
 
         self.app.control_bar.set_callbacks(
             on_start=self.start_server,
@@ -42,6 +44,15 @@ class GuiController:
         self.app.status_bar.set_status("Idle")
         self.app.control_bar.set_running_state(False)
         self.app.log_panel.write("[gui] Lifecycle manager ready.\n")
+
+        # Log tray status
+        if self.tray.available:
+            self.app.log_panel.write("[gui] System tray integration available.\n")
+        else:
+            self.app.log_panel.write(
+                f"[gui] System tray not available: {self.tray.unavailable_reason}\n"
+            )
+
         self._poll_logs()
 
     def start_server(self) -> None:
@@ -75,9 +86,11 @@ class GuiController:
         if self.settings.close_to_tray_on_close:
             if self._minimize_to_tray():
                 return
-            self.app.log_panel.write(
-                "[gui] Tray integration not available. Closing window.\n"
-            )
+            if not self._tray_unavailable_logged:
+                self.app.log_panel.write(
+                    "[gui] Tray integration not available. Closing window.\n"
+                )
+                self._tray_unavailable_logged = True
 
         self._shutdown_app()
 
@@ -85,7 +98,11 @@ class GuiController:
         if self._is_exiting:
             return
         if self.app.root.state() == "iconic":
-            self._minimize_to_tray()
+            # Avoid repeated attempts/logs
+            if not self._minimized_to_tray:
+                ok = self._minimize_to_tray()
+                if ok:
+                    self._minimized_to_tray = True
 
     def open_settings(self) -> None:
         SettingsDialog(
@@ -112,6 +129,9 @@ class GuiController:
         self.app.root.deiconify()
         self.app.root.lift()
         self.app.root.focus_force()
+        # Reset minimize/tray flags
+        self._minimized_to_tray = False
+        self._tray_unavailable_logged = False
 
     def _exit_from_tray(self) -> None:
         self.tray.hide()
@@ -119,9 +139,12 @@ class GuiController:
 
     def _minimize_to_tray(self) -> bool:
         if not self.tray.show():
-            self.app.log_panel.write(
-                f"[gui] Tray integration not available: {self.tray.unavailable_reason}\n"
-            )
+            # Avoid spamming the log repeatedly
+            if not self._tray_unavailable_logged:
+                self.app.log_panel.write(
+                    f"[gui] Tray integration not available: {self.tray.unavailable_reason}\n"
+                )
+                self._tray_unavailable_logged = True
             return False
         self.app.root.withdraw()
         self.app.log_panel.write(
