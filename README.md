@@ -12,51 +12,9 @@ This is what the GUI looks like:
 
 # DiPul MapProxy GUI Quickstart
 
-## 1) Install requirements
+## 1) Download binaries for your system from releases on GitHub
 
-Open a console window, navigate to where you want to install the GUI, then clone the repository
-
-```bash
-git clone https://github.com/y-decimal/dipul-MapProxy
-```
-
--------
-
-Now navigate to the new directory and create a virtual environment
-
-```bash
-python -m venv .venv
-```
-
-Note: You will need to install python if you don't already have it
-
--------
-
-Install the requirements
-
-Windows PowerShell:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
-
-Linux/macOS:
-
-```bash
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
---------
-
-## 2) Launch the GUI
-
-```bash
-python launch-gui.py
-```
-
--------
+## 2) Launch the executable
 
 ## 3) Start MapProxy and copy URL
 
@@ -92,5 +50,52 @@ Quick values in iNav Configurator:
 
 
 -------------
+
+## If you don't want to run the executables:
+
+Open a console window, navigate to where you want to install the GUI, then clone the repository
+
+```bash
+git clone https://github.com/y-decimal/dipul-MapProxy
+```
+
+-------
+
+Now navigate to the new directory and create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Note: You will need to install python if you don't already have it
+
+-------
+
+Install the requirements
+
+Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+Linux/macOS:
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+-------
+
+Launch the GUI
+
+```bash
+python launch-gui.py
+```
+
+-------
+
 
 ### Note: The GUI and the launch script were mostly vibe coded. Seems to work fine on my machine, results may differ for you though. Feel free to report any issues through the issues tracker.
