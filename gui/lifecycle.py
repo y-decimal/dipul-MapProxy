@@ -34,7 +34,7 @@ class MapProxyProcessManager:
         if self.is_running():
             return False, "MapProxy is already running."
 
-        launcher = self.project_root / "start-mapproxy.py"
+        launcher = self.project_root / "gui" / "start-mapproxy.py"
         if not launcher.exists():
             return False, f"Missing launcher: {launcher}"
 

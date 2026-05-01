@@ -9,8 +9,8 @@ from pathlib import Path
 from wsgiref.simple_server import make_server
 
 
-SCRIPT_DIR = Path(__file__).parent.resolve()
-MAPPROXY_YAML = SCRIPT_DIR / "mapproxy_config" / "mapproxy.yaml"
+ROOT_DIR = Path(__file__).parent.parent.resolve()
+MAPPROXY_YAML = ROOT_DIR / "mapproxy_config" / "mapproxy.yaml"
 
 
 def log(message: str) -> None:
@@ -43,7 +43,7 @@ def main() -> None:
     host = args.host
     port = args.port
 
-    os.chdir(SCRIPT_DIR)
+    os.chdir(ROOT_DIR)
 
     if not MAPPROXY_YAML.exists():
         log(f"Missing config: {MAPPROXY_YAML}")
