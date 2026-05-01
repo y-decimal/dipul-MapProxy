@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools<81", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dipul-mapproxy"
+version = "0.1.0"
+description = "DiPul MapProxy launcher and status dashboard"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mapproxy==2.0.0",
+    "pyproj",
+    "setuptools<81",
+    "pystray",
+]
+
+[tool.setuptools]
+packages = ["gui"]

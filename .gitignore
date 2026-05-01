@@ -2,3 +2,8 @@ mapproxy_config/cache_data/
 .venv/
 __pycache__/
 gui_settings.json
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
