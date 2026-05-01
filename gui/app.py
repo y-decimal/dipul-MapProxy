@@ -82,9 +82,20 @@ class MapProxyGuiApp:
 
 def main() -> None:
     from .controller import GuiController
+    import sys
 
     app = MapProxyGuiApp()
-    GuiController(app, project_root=Path(__file__).resolve().parent.parent)
+
+    # Handle both normal and PyInstaller bundle execution
+    if getattr(sys, "frozen", False):
+        # Running from PyInstaller bundle
+        # sys._MEIPASS is the temporary extraction directory
+        project_root = Path(sys._MEIPASS)  # type: ignore
+    else:
+        # Running normally
+        project_root = Path(__file__).resolve().parent.parent
+
+    GuiController(app, project_root=project_root)
     app.run()
 
 
