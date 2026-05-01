@@ -3,23 +3,11 @@
 
 import argparse
 import os
-import socket
 import sys
 from pathlib import Path
-from wsgiref.simple_server import make_server
 
-
-ROOT_DIR = Path(__file__).parent.parent.resolve()
-MAPPROXY_YAML = ROOT_DIR / "mapproxy_config" / "mapproxy.yaml"
-
-
-def log(message: str) -> None:
-    print(f"[start-mapproxy] {message}")
-
-
-def is_port_in_use(port: int) -> bool:
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        return sock.connect_ex(("127.0.0.1", port)) == 0
+# Import the server logic
+from start_mapproxy_server import get_project_root, run_server
 
 
 def parse_args() -> argparse.Namespace:
@@ -40,29 +28,16 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    host = args.host
-    port = args.port
 
-    os.chdir(ROOT_DIR)
+    project_root = None
+    if "MAPPROXY_PROJECT_ROOT" in os.environ:
+        project_root = Path(os.environ["MAPPROXY_PROJECT_ROOT"])
 
-    if not MAPPROXY_YAML.exists():
-        log(f"Missing config: {MAPPROXY_YAML}")
-        sys.exit(1)
-
-    if is_port_in_use(port):
-        log(f"Port {port} is already in use.")
-        sys.exit(1)
-
-    from mapproxy.wsgiapp import make_wsgi_app
-
-    log(f"Starting MapProxy at http://{host}:{port}/service?")
-    app = make_wsgi_app(services_conf=str(MAPPROXY_YAML), debug=False, reloader=False)
-
-    with make_server(host, port, app) as server:
-        try:
-            server.serve_forever()
-        except KeyboardInterrupt:
-            log("Shutting down...")
+    run_server(
+        host=args.host,
+        port=args.port,
+        project_root=project_root,
+    )
 
 
 if __name__ == "__main__":
